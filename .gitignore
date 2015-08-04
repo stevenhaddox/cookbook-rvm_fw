@@ -1,0 +1,18 @@
+.vagrant
+Berksfile.lock
+*~
+*#
+.#*
+\#*#
+.*.sw[a-z]
+*.un~
+
+# Bundler
+.bundle/*
+bin/*
+Gemfile.lock
+vendor/bundle
+
+.kitchen/
+.kitchen.local.yml
+tmp/

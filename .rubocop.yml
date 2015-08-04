@@ -1,0 +1,10 @@
+AllCops:
+  Include:
+    - Berksfile
+    - Gemfile
+    - Guardfile
+    - Rakefile
+  Exclude:
+    - spec/**/*
+    - test/**/*
+    - vendor/**/*
