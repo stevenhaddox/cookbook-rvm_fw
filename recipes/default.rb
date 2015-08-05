@@ -2,7 +2,67 @@
 # Cookbook Name:: rvm_fw
 # Recipe:: default
 #
-# Copyright 2015, YOUR_COMPANY_NAME
-#
-# All rights reserved - Do Not Redistribute
-#
+# Copyright (c) 2015 Steven Haddox
+include_recipe 'build-essential'
+require 'chef/mixin/shell_out'
+Chef::Recipe.send(:include, ::Chef::Mixin::ShellOut)
+Chef::Resource.send(:include, ::Chef::Mixin::ShellOut)
+Chef::Recipe.send(:include, ::RvmfwCookbook::Prereqs)
+Chef::Resource.send(:include, ::RvmfwCookbook::Prereqs)
+
+potentially_at_compile_time do
+  # Pre-install packages to ensure RVM Rubies can compile against them
+  # iconv libyaml libxml2 libxslt ncurses openssl readline zlib
+  packages = value_for_platform_family(
+    %w(rhel fedora suse) => %w(
+      autoconf automake bash bison bzip2 curl gcc-c++ git grep gzip libffi-devel
+      libtool libyaml-devel make openssl-devel patch readline readline-devel sed
+      tar zlib zlib-devel
+    ),
+    %w(debian) => %w(
+      autoconf automake bash bison build-essential bzip2 curl git-core grep gzip
+      libreadline6 libreadline6-dev libssl-dev libxml2-dev libxslt-dev
+      libyaml-dev openssl pkg-config sed tar zlib1g zlib1g-dev
+    ),
+    %w(gentoo) => [],
+    %w(default) => []
+  )
+  if packages.empty?
+    manual_libraries_warning
+  else
+    packages.each do |pkg_name|
+      package pkg_name
+    end
+  end
+
+  # Install RVM from RVM::FW by dynamically building out the install command
+  execute 'install_rvm' do
+    command build_rvm_install
+    # Do not run if RVM is already installed AND matches expected version
+    not_if do
+      correct_rvm_installed?
+    end
+  end
+
+  # Install default global Ruby
+  execute 'install_default_ruby' do
+    rvm_cmd = "#{node['rvm_fw']['path']}/bin/rvm"
+    ruby_version = "#{node['rvm_fw']['global_ruby']} --verify-downloads 1"
+    command "#{rvm_cmd} install #{ruby_version}"
+    # Do not run if global ruby is already installed
+    not_if do
+      global_ruby_installed?
+    end
+  end
+
+  # Set global ruby to --default
+  execute 'set_rvm_default' do
+    command %{bash -c "source #{node['rvm_fw']['path']}/scripts/rvm && \
+              rvm use #{node['rvm_fw']['global_ruby']} --default"}
+    ::Chef::Log.debug("Running [#{command}]")
+    # Do not run if global ruby is set as default ruby
+    not_if do
+      rvm_default_set?
+    end
+  end
+end
