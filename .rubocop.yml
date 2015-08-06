@@ -8,3 +8,5 @@ AllCops:
     - spec/**/*
     - test/**/*
     - vendor/**/*
+    - files/default/vendor/**/*
+    - tmp/**/*
