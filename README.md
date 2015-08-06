@@ -1,5 +1,6 @@
 rvm_fw Cookbook
 ===============
+
 This is a very opinionated and simple cookbook for utilizing an RVM::FW server instance and installing a default Ruby via RVM.
 
 Requirements
@@ -69,8 +70,51 @@ Include `rvm_fw` in your node's `run_list`:
 }
 ```
 
+Notes
+-----
+
+#### Testing Notes
+
+In order to test this cookbook in its current form you'll need to setup your own RVM::FW instance and add the URL to the `['rvm_fw']['url']` attribute.
+
+Tests are currently integration tests with test-kitchen:
+
+`bundle exec kitchen test`
+
+Kitchen tests are non-functional for debian platform systems. Not sure why yet. For now run the following:
+
+```bash
+bundle exec kitchen converge
+```
+
+You can verify that everything works as expected with the following:
+
+```bash
+bundle exec kitchen login <platform>
+sudo su -
+# Run the following to verify the cookbook works as expected
+rvm --version
+ruby --version
+gem list bundler
+```
+
+#### Fedora (and possibly older RHEL distributions):
+
+On Fedora (with test kitchen) you may need to negate `requiretty`:
+
+```bash
+$ visudo
+# Change this line:
+Defaults requiretty
+# To this line:
+Defaults !requiretty
+```
+
+If this occurs in your environment you'll need to configure your sudoers file prior to the rvm_fw cookbook running as it is outside the scope of this cookbook to make assumptions about your sudoers file.
+
 Contributing
 ------------
+
 1. Fork the repository on Github
 2. Create a named feature branch (like `add_component_x`)
 3. Add specs for your feature
@@ -80,4 +124,5 @@ Contributing
 
 License and Authors
 -------------------
+
 Authors: [Steven Haddox](https://github.com/stevenhaddox)

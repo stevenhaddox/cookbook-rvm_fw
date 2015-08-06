@@ -41,16 +41,15 @@ equivalent for your platform) before installing Ruby!'
         "curl #{node['rvm_fw']['url']}/install"
       else
         # wget version of RVM::FW install command
-        "wget -q -O #{node['rvm_fw']['url']}/install"
+        "wget -qO- #{node['rvm_fw']['url']}/install"
       end
     end
 
     # Detect if RVM is installed and the current version provided by RVM::FW
     def correct_rvm_installed?
       return false unless ::File.exist?("#{node['rvm_fw']['path']}/bin/rvm")
-      ::Chef::Log.info '/usr/local/rvm/bin/rvm found'
-      cmd = %{bash -c "source #{node['rvm_fw']['path']}/scripts/rvm && \
-              rvm --version"}
+      cmd = %(bash -c "source #{node['rvm_fw']['path']}/scripts/rvm && \
+              rvm --version")
       ::Chef::Log.debug("Running [#{cmd}]")
       results = shell_out(cmd)
       results.stdout.match(node['rvm_fw']['version'])
@@ -58,8 +57,8 @@ equivalent for your platform) before installing Ruby!'
 
     # Detect if global ruby version is already installed via RVM
     def global_ruby_installed?
-      cmd = %{bash -c "source #{node['rvm_fw']['path']}/scripts/rvm && \
-              rvm list"}
+      cmd = %(bash -c "source #{node['rvm_fw']['path']}/scripts/rvm && \
+              rvm list")
       ::Chef::Log.debug("Running [#{cmd}]")
       results = shell_out(cmd)
       results.stdout.match(node['rvm_fw']['global_ruby'])
@@ -67,8 +66,8 @@ equivalent for your platform) before installing Ruby!'
 
     # Detect if global ruby version is already set as default RVM ruby
     def rvm_default_set?
-      cmd = %{bash -c "source #{node['rvm_fw']['path']}/scripts/rvm && \
-              rvm list"}
+      cmd = %(bash -c "source #{node['rvm_fw']['path']}/scripts/rvm && \
+              rvm list")
       ::Chef::Log.debug("Running [#{cmd}]")
       results = shell_out(cmd)
       results.stdout.match("=\\* #{node['rvm_fw']['global_ruby']}")

@@ -3,6 +3,9 @@
 # Recipe:: default
 #
 # Copyright (c) 2015 Steven Haddox
+
+# Update apt packages for debian platforms
+include_recipe 'apt' if node['platform_family'] == 'debian'
 include_recipe 'build-essential'
 require 'chef/mixin/shell_out'
 Chef::Recipe.send(:include, ::Chef::Mixin::ShellOut)
@@ -11,6 +14,7 @@ Chef::Recipe.send(:include, ::RvmfwCookbook::Prereqs)
 Chef::Resource.send(:include, ::RvmfwCookbook::Prereqs)
 
 potentially_at_compile_time do
+
   # Pre-install packages to ensure RVM Rubies can compile against them
   # iconv libyaml libxml2 libxslt ncurses openssl readline zlib
   packages = value_for_platform_family(
@@ -57,12 +61,17 @@ potentially_at_compile_time do
 
   # Set global ruby to --default
   execute 'set_rvm_default' do
-    command %{bash -c "source #{node['rvm_fw']['path']}/scripts/rvm && \
-              rvm use #{node['rvm_fw']['global_ruby']} --default"}
+    command %(bash -c "source #{node['rvm_fw']['path']}/scripts/rvm && \
+              rvm use #{node['rvm_fw']['global_ruby']} --default")
     ::Chef::Log.debug("Running [#{command}]")
     # Do not run if global ruby is set as default ruby
     not_if do
       rvm_default_set?
     end
+  end
+
+  # Install bundler gem
+  execute 'install_bundler' do
+    command 'gem install bundler'
   end
 end
