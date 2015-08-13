@@ -14,7 +14,6 @@ Chef::Recipe.send(:include, ::RvmfwCookbook::Prereqs)
 Chef::Resource.send(:include, ::RvmfwCookbook::Prereqs)
 
 potentially_at_compile_time do
-
   # Pre-install packages to ensure RVM Rubies can compile against them
   # iconv libyaml libxml2 libxslt ncurses openssl readline zlib
   packages = value_for_platform_family(
@@ -50,9 +49,9 @@ potentially_at_compile_time do
 
   # Install default global Ruby
   execute 'install_default_ruby' do
-    rvm_cmd = "#{node['rvm_fw']['path']}/bin/rvm"
+    rvm_cmd = "source #{node['rvm_fw']['path']}/scripts/rvm"
     ruby_version = "#{node['rvm_fw']['global_ruby']} --verify-downloads 1"
-    command "#{rvm_cmd} install #{ruby_version}"
+    command %(bash -c "#{rvm_cmd} && rvm install #{ruby_version} --default")
     # Do not run if global ruby is already installed
     not_if do
       global_ruby_installed?
@@ -72,6 +71,7 @@ potentially_at_compile_time do
 
   # Install bundler gem
   execute 'install_bundler' do
-    command 'gem install bundler'
+    gem_bin = "#{node['rvm_fw']['path']}/wrappers/default/gem"
+    command "#{gem_bin} install bundler"
   end
 end

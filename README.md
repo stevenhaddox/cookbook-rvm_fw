@@ -73,6 +73,26 @@ Include `rvm_fw` in your node's `run_list`:
 Notes
 -----
 
+#### Using RVM installed Ruby Binaries
+
+RVM automatically generates wrappers for each ruby installed through it. These
+wrapper binaries are perfect cronjobs, library dependencies, etc.
+
+Binaries are found in the following location:
+
+`#{node['rvm_fw']['path']/wrappers/default`
+
+And are available for the following commands:
+
+* ruby
+* gem
+* rake
+* irb
+* rdoc
+* ri
+* erb
+* testrb
+
 #### Testing Notes
 
 In order to test this cookbook in its current form you'll need to setup your own RVM::FW instance and add the URL to the `['rvm_fw']['url']` attribute.

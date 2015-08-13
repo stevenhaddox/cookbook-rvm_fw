@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe 'rvm_fw::default' do
-  describe command('which ruby') do
+  describe command('bash -c "source /usr/local/rvm/scripts/rvm && which ruby"') do
     it "executes without error" do
       expect(subject.exit_status).to eq 0
     end
@@ -10,7 +10,7 @@ describe 'rvm_fw::default' do
     end
   end
 
-  describe command('rvm --version') do
+  describe command('bash -c "source /usr/local/rvm/scripts/rvm && rvm --version"') do
     it "executes without error" do
       expect(subject.exit_status).to eq 0
     end
@@ -19,7 +19,7 @@ describe 'rvm_fw::default' do
     end
   end
 
-  describe command('ruby --version') do
+  describe command('/usr/local/rvm/wrappers/default/ruby --version') do
     it "executes without error" do
       expect(subject.exit_status).to eq 0
     end
@@ -28,7 +28,7 @@ describe 'rvm_fw::default' do
     end
   end
 
-  describe command('gem list bundler') do
+  describe command('/usr/local/rvm/wrappers/default/gem list bundler') do
     it "executes without error" do
       expect(subject.exit_status).to eq 0
     end
