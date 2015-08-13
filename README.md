@@ -38,7 +38,7 @@ Attributes
     <td><tt>['rvm_fw']['url']</tt></td>
     <td>String</td>
     <td>RVM::FW server URL (with protocol)</td>
-    <td><tt>'http://rvm-fw.herokuapp.com'</tt></td>
+    <td><tt>nil</tt></td>
   </tr>
   <tr>
     <td><tt>['rvm_fw']['version']</tt></td>
