@@ -20,4 +20,9 @@ suites:
   - name: default
     run_list:
       - recipe[rvm_fw::default]
-    attributes:
+    attributes: {
+      rvm_fw: {
+        url: nil,
+        disable_requiretty: true
+      }
+    }

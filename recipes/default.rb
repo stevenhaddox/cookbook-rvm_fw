@@ -38,6 +38,23 @@ potentially_at_compile_time do
     end
   end
 
+  # Disable requiretty in /etc/sudoers file if enabled
+  ruby_block 'disable_requiretty' do
+    block do
+      file = Chef::Util::FileEdit.new('/etc/sudoers')
+      file.search_file_replace_line(
+        /^Defaults\s*requiretty.*$/,
+        'Defaults !requiretty # Chef inserted via rvm_fw cookbook'
+      )
+      file.write_file
+    end
+    not_if do
+      file = ::File.new('/etc/sudoers')
+      contents = file.read
+      contents.match(/^Defaults\s+!requiretty.*$/)
+    end
+  end
+
   # Install RVM from RVM::FW by dynamically building out the install command
   execute 'install_rvm' do
     command build_rvm_install

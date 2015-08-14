@@ -12,47 +12,12 @@ Requirements
 
 Attributes
 ----------
-
-#### rvm_fw::default
-
-<table>
-  <tr>
-    <th>Key</th>
-    <th>Type</th>
-    <th>Description</th>
-    <th>Default</th>
-  </tr>
-  <tr>
-    <td><tt>['rvm_fw']['path']</tt></td>
-    <td>String</td>
-    <td>prefix for where to install RVM</td>
-    <td><tt>'/usr/local/rvm'</tt></td>
-  </tr>
-  <tr>
-    <td><tt>['rvm_fw']['sudo']</tt></td>
-    <td>Boolean</td>
-    <td>Use sudo to install RVM server-wide</td>
-    <td><tt>true</tt></td>
-  </tr>
-  <tr>
-    <td><tt>['rvm_fw']['url']</tt></td>
-    <td>String</td>
-    <td>RVM::FW server URL (with protocol)</td>
-    <td><tt>nil</tt></td>
-  </tr>
-  <tr>
-    <td><tt>['rvm_fw']['version']</tt></td>
-    <td>String</td>
-    <td>RVM::FW RVM installer version</td>
-    <td><tt>'1.18.14'</tt></td>
-  </tr>
-  <tr>
-    <td><tt>['rvm_fw']['global_ruby']</tt></td>
-    <td>String</td>
-    <td>Global ruby version to install via RVM</td>
-    <td><tt>'ruby-2.2.2'</tt></td>
-  </tr>
-</table>
+* `['rvm_fw']['path'] = '/usr/local/rvm'` (String) - Prefix for where to install RVM
+* `['rvm_fw']['sudo'] = nil` [True, False] - Use sudo to install RVM server-wide
+* `['rvm_fw']['url'] = nil` (String) - RVM::FW server URL (e.g., 'http://rvm-fw.herokuapp.com')
+* `['rvm_fw']['version'] = '1.18.14'` (String) - RVM::FW provided RVM version
+* `['rvm_fw']['global_ruby'] = 'ruby-2.2.2'` (String) - Default Ruby version to install via RVM
+* `['rvm_fw']['disable_requiretty'] = false` [True, False] - Enable the cookbook to disable `requiretty` setting in the `/etc/sudoers` file
 
 Usage
 -----
@@ -80,7 +45,7 @@ wrapper binaries are perfect cronjobs, library dependencies, etc.
 
 Binaries are found in the following location:
 
-`#{node['rvm_fw']['path']/wrappers/default`
+`#{node['rvm_fw']['path']}/wrappers/default`
 
 And are available for the following commands:
 
@@ -93,44 +58,23 @@ And are available for the following commands:
 * erb
 * testrb
 
-#### Testing Notes
+#### RHEL Distros & `requiretty`
 
-In order to test this cookbook in its current form you'll need to setup your own RVM::FW instance and add the URL to the `['rvm_fw']['url']` attribute.
+In older (and SELinux enabled) distributions based on RHEL you'll often encounter a setting in `/etc/sudoers` that sets `Defaults requiretty`. This setting doesn't provide a lot of added security and is actually disabled in most newer distros.
+
+This cookbook will change the setting to `Defaults !requiretty` if you want it to. This will prevent an error encountered on nodes with it enabled, but you have to explicitly enable it with the following attribute setting:
+
+`['rvm_fw']['disable_requiretty'] = true`
+
+Once you've set that attribute value to `true` the cookbook will modify requiretty so that the cookbook won't error when running.
+
+#### Testing Notes
 
 Tests are currently integration tests with test-kitchen:
 
 `bundle exec kitchen test`
 
-Kitchen tests are non-functional for debian platform systems. Not sure why yet. For now run the following:
-
-```bash
-bundle exec kitchen converge
-```
-
-You can verify that everything works as expected with the following:
-
-```bash
-bundle exec kitchen login <platform>
-sudo su -
-# Run the following to verify the cookbook works as expected
-rvm --version
-ruby --version
-gem list bundler
-```
-
-#### Fedora (and possibly older RHEL distributions):
-
-On Fedora (with test kitchen) you may need to negate `requiretty`:
-
-```bash
-$ visudo
-# Change this line:
-Defaults requiretty
-# To this line:
-Defaults !requiretty
-```
-
-If this occurs in your environment you'll need to configure your sudoers file prior to the rvm_fw cookbook running as it is outside the scope of this cookbook to make assumptions about your sudoers file.
+In order to test this cookbook in its current form you'll need to setup your own RVM::FW instance and add the URL to the `['rvm_fw']['url']` attribute. For the test suite the easiest place to add this is in the `.kitchen.yml` file.
 
 Contributing
 ------------
