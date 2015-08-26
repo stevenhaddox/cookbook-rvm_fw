@@ -22,7 +22,7 @@ suites:
       - recipe[rvm_fw::default]
     attributes: {
       rvm_fw: {
-        url: nil,
+        url: "<%= ENV['RVM_FW_URL'] %>",
         disable_requiretty: true
       }
     }

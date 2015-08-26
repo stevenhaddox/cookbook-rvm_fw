@@ -74,7 +74,7 @@ Tests are currently integration tests with test-kitchen:
 
 `bundle exec kitchen test`
 
-In order to test this cookbook in its current form you'll need to setup your own RVM::FW instance and add the URL to the `['rvm_fw']['url']` attribute. For the test suite the easiest place to add this is in the `.kitchen.yml` file.
+In order to test this cookbook you'll need to point to or setup an RVM::FW instance and set an environment variable RVM_FW_URL which is used in the `.kitchen.yml` file.
 
 Contributing
 ------------
