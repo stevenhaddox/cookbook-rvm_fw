@@ -19,8 +19,8 @@ potentially_at_compile_time do
   packages = value_for_platform_family(
     %w(rhel fedora suse) => %w(
       autoconf automake bash bison bzip2 curl gcc-c++ git grep gzip libffi-devel
-      libtool libyaml-devel make openssl-devel patch readline readline-devel sed
-      tar zlib zlib-devel
+      libtool libxml2-devel libxslt-devel libyaml-devel make openssl-devel patch
+      readline readline-devel sed tar zlib zlib-devel
     ),
     %w(debian) => %w(
       autoconf automake bash bison build-essential bzip2 curl git-core grep gzip
