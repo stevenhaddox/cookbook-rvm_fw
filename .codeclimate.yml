@@ -1,5 +1,8 @@
 languages:
-   Ruby: true
+  Ruby: true
+engines:
+  foodcritic:
+    enabled: true
 exclude_paths:
 - "test/*"
 - "spec/*"
