@@ -66,7 +66,7 @@ potentially_at_compile_time do
 
   # Upload /etc/rvmrc template to ensure correct path and umask settings
   template '/etc/rvmrc' do
-    source 'system_rvmrc'
+    source 'system_rvmrc.erb'
     mode '0644'
     owner 'root'
     group 'rvm'
