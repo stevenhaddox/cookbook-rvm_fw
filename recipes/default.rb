@@ -64,6 +64,14 @@ potentially_at_compile_time do
     end
   end
 
+  # Upload /etc/rvmrc template to ensure correct path and umask settings
+  template '/etc/rvmrc' do
+    source 'system_rvmrc.erb'
+    mode '0644'
+    owner 'root'
+    group 'rvm'
+  end
+
   # Install default global Ruby
   execute 'install_default_ruby' do
     rvm_cmd = "source #{node['rvm_fw']['path']}/scripts/rvm"
