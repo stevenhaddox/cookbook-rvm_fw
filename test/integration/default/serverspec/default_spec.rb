@@ -2,7 +2,8 @@ require 'spec_helper'
 
 # User install
 describe 'rvm_fw::default' do
-  describe command('bash -c "source /home/vagrant/.rvm/scripts/rvm && which ruby"') do
+  rvm_user = 'vagrant'
+  describe command("su #{rvm_user} -l -c 'source /home/vagrant/.rvm/scripts/rvm && which ruby'") do
     it "executes without error" do
       expect(subject.exit_status).to eq 0
     end
@@ -11,7 +12,7 @@ describe 'rvm_fw::default' do
     end
   end
 
-  describe command('bash -c "source /home/vagrant/.rvm/scripts/rvm && rvm --version"') do
+  describe command("su #{rvm_user} -l -c 'source /home/vagrant/.rvm/scripts/rvm && rvm --version'") do
     it "executes without error" do
       expect(subject.exit_status).to eq 0
     end
@@ -20,7 +21,7 @@ describe 'rvm_fw::default' do
     end
   end
 
-  describe command('/home/vagrant/.rvm/wrappers/default/ruby --version') do
+  describe command("/home/vagrant/.rvm/wrappers/default/ruby --version") do
     it "executes without error" do
       expect(subject.exit_status).to eq 0
     end
@@ -29,7 +30,7 @@ describe 'rvm_fw::default' do
     end
   end
 
-  describe command('/home/vagrant/.rvm/wrappers/default/gem list bundler') do
+  describe command("su #{rvm_user} -l -c '/home/vagrant/.rvm/wrappers/default/gem list bundler'") do
     it "executes without error" do
       expect(subject.exit_status).to eq 0
     end
@@ -71,4 +72,3 @@ end
 #    end
 #  end
 #end
-#
