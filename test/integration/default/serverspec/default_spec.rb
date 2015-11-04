@@ -21,6 +21,16 @@ describe 'rvm_fw::default' do
     end
   end
 
+  describe command("su #{rvm_user} -l -c 'source /home/vagrant/.rvm/scripts/rvm && ruby --version'") do
+    it "executes without error" do
+      expect(subject.exit_status).to eq 0
+    end
+    it "is the right version" do
+      expect(subject.stdout).to match(/ruby 2.2.2/)
+    end
+  end
+
+  # Verify wrappers work as expected for cronjobs
   describe command("/home/vagrant/.rvm/wrappers/default/ruby --version") do
     it "executes without error" do
       expect(subject.exit_status).to eq 0
