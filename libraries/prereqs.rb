@@ -24,8 +24,10 @@ equivalent for your platform) before installing Ruby!'
 
     # Create installation command for RVM via RVM::FW
     def build_rvm_install
-      fail 'RVM::FW URL is a required attribute!' if node['rvm_fw']['url'].nil?
-      if node['rvm_fw']['sudo'] == true
+      rvm_fw_url = node['rvm_fw']['url']
+      rvm_fw_url ||= ENV['RVM_FW_URL']
+      fail 'RVM::FW URL is a required attribute!' if rvm_fw_url.nil?
+      if node['rvm_fw']['user'] == 'root'
         bash_cmd = 'sudo bash'
       else
         bash_cmd = 'bash'
@@ -46,28 +48,28 @@ equivalent for your platform) before installing Ruby!'
     end
 
     # Detect if RVM is installed and the current version provided by RVM::FW
-    def correct_rvm_installed?
-      return false unless ::File.exist?("#{node['rvm_fw']['path']}/bin/rvm")
-      cmd = %(bash -c "source #{node['rvm_fw']['path']}/scripts/rvm && \
-              rvm --version")
+    def correct_rvm_installed?(rvm_path, rvm_user)
+      return false unless ::File.exist?("#{rvm_path}/bin/rvm")
+      cmd = "su #{rvm_user} -l -c 'source #{rvm_path}/scripts/rvm && \
+              rvm --version'"
       ::Chef::Log.debug("Running [#{cmd}]")
       results = shell_out(cmd)
       results.stdout.match(node['rvm_fw']['version'])
     end
 
     # Detect if global ruby version is already installed via RVM
-    def global_ruby_installed?
-      cmd = %(bash -c "source #{node['rvm_fw']['path']}/scripts/rvm && \
-              rvm list")
+    def global_ruby_installed?(rvm_path, rvm_user)
+      cmd = "su #{rvm_user} -l -c 'source #{rvm_path}/scripts/rvm && \
+              rvm list'"
       ::Chef::Log.debug("Running [#{cmd}]")
       results = shell_out(cmd)
       results.stdout.match(node['rvm_fw']['global_ruby'])
     end
 
     # Detect if global ruby version is already set as default RVM ruby
-    def rvm_default_set?
-      cmd = %(bash -c "source #{node['rvm_fw']['path']}/scripts/rvm && \
-              rvm list")
+    def rvm_default_set?(rvm_path, rvm_user)
+      cmd = "su #{rvm_user} -l -c 'source #{rvm_path}/scripts/rvm && \
+              rvm list'"
       ::Chef::Log.debug("Running [#{cmd}]")
       results = shell_out(cmd)
       results.stdout.match("=\\* #{node['rvm_fw']['global_ruby']}")
