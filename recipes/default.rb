@@ -77,7 +77,8 @@ potentially_at_compile_time do
   execute 'install_default_ruby' do
     rvm_cmd = "source #{rvm_path}/scripts/rvm"
     ruby_version = "#{node['rvm_fw']['global_ruby']}"
-    cmd = "#{rvm_cmd} && rvm install #{ruby_version} --verify-downloads 1 --default"
+    flags = '--default --verify-downloads 1'
+    cmd = "#{rvm_cmd} && rvm install #{ruby_version} #{flags}"
     command "su #{rvm_user} -l -c '#{cmd}'"
     # Do not run if global ruby is already installed
     not_if do

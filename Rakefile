@@ -9,7 +9,7 @@ require 'rubocop/rake_task'
 RuboCop::RakeTask.new
 
 desc 'Run rspec, foodcritic, and rubocop'
-task default: [:spec, :foodcritic, :rubocop]
+task default: [:foodcritic, :rubocop]
 
 desc 'Runs foodcritic linter'
 task :foodcritic do
