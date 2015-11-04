@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-# User install
+# Verify RVM user install works
 describe 'rvm_fw::default' do
   rvm_user = 'vagrant'
   describe command("su #{rvm_user} -l -c 'source /home/vagrant/.rvm/scripts/rvm && which ruby'") do
@@ -37,7 +37,7 @@ describe 'rvm_fw::default' do
   end
 end
 
-#TODO: Verify system-wide install works someday
+# Verify system-wide install works
 #describe 'rvm_fw::default' do
 #  describe command('bash -c "source /usr/local/rvm/scripts/rvm && which ruby"') do
 #    it "executes without error" do
