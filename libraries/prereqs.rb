@@ -24,9 +24,16 @@ equivalent for your platform) before installing Ruby!'
 
     # Create installation command for RVM via RVM::FW
     def build_rvm_install
-      fail 'RVM::FW URL is a required attribute!' if node['rvm_fw']['url'].nil?
+      rvm_fw_url = node['rvm_fw']['url']
+      rvm_fw_url ||= ENV['RVM_FW_URL']
+      fail 'RVM::FW URL is a required attribute!' if rvm_fw_url.nil?
+      if node['rvm_fw']['user'] == 'root'
+        bash_cmd = 'sudo bash'
+      else
+        bash_cmd = 'bash'
+      end
 
-      "\\#{dynamic_get_command} | bash"
+      "\\#{dynamic_get_command} | #{bash_cmd}"
     end
 
     # Determine if wget is installed, fall back to curl

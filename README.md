@@ -12,7 +12,7 @@ Requirements
 
 Attributes
 ----------
-* `['rvm_fw']['path'] = '<path-relative-to-user>'` (String) - Prefix for where to install RVM, overrides default
+* `['rvm_fw']['path'] = nil` (String) - Custom path for where to install RVM, overrides RVM default paths
 * `['rvm_fw']['user'] = 'root'` (String) - Specify the user which installs rvm
 * `['rvm_fw']['url'] = nil` (String) - RVM::FW server URL (e.g., 'http://rvm-fw.herokuapp.com')
 * `['rvm_fw']['version'] = '1.18.14'` (String) - RVM::FW provided RVM version
@@ -74,7 +74,10 @@ Tests are currently integration tests with test-kitchen:
 
 `bundle exec kitchen test`
 
-In order to test this cookbook you'll need to point to or setup an RVM::FW instance and set an environment variable RVM_FW_URL which is used in the `.kitchen.yml` file.
+In order to test this cookbook you'll need to point to or setup an RVM::FW instance and set the following environment variables:
+
+* `RVM_FW_URL`: The RVM::FW server you will use to install RVM from
+* `RVM_FW_USER`: The user to install RVM as (`root`, or `vagrant`) for example.
 
 Contributing
 ------------

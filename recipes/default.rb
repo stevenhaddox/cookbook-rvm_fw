@@ -19,7 +19,8 @@ if rvm_user == 'root'
 else
   rvm_path = "/home/#{rvm_user}/.rvm"
 end
-rvm_path = node['rvm_fw']['path'] if !node['rvm_fw']['path'].nil?
+# node['rvm_fw']['path'] overrides above default paths
+rvm_path = node['rvm_fw']['path'] unless node['rvm_fw']['path'].nil?
 
 potentially_at_compile_time do
   # Pre-install packages to ensure RVM Rubies can compile against them
@@ -100,7 +101,6 @@ potentially_at_compile_time do
   # Install bundler gem
   execute 'install_bundler' do
     gem_bin = "#{rvm_path}/wrappers/default/gem"
-
     command "su #{rvm_user} -l -c '#{gem_bin} install bundler'"
   end
 end
