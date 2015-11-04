@@ -13,7 +13,7 @@ Requirements
 Attributes
 ----------
 * `['rvm_fw']['path'] = nil` (String) - Custom path for where to install RVM, overrides RVM default paths
-* `['rvm_fw']['user'] = 'root'` (String) - Specify the user which installs rvm
+* `['rvm_fw']['user'] = 'root'` (String) - User to install RVM as: root for system-wide, normal install otherwise
 * `['rvm_fw']['url'] = nil` (String) - RVM::FW server URL (e.g., 'http://rvm-fw.herokuapp.com')
 * `['rvm_fw']['version'] = '1.18.14'` (String) - RVM::FW provided RVM version
 * `['rvm_fw']['global_ruby'] = 'ruby-2.2.2'` (String) - Default Ruby version to install via RVM
