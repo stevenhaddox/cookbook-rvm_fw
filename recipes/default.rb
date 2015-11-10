@@ -103,5 +103,10 @@ potentially_at_compile_time do
   execute 'install_bundler' do
     gem_bin = "#{rvm_path}/wrappers/default/gem"
     command "su #{rvm_user} -l -c '#{gem_bin} install bundler'"
+    is_installed = <<-EOH
+      #{gem_bin} list bundler -i
+    EOH
+
+    not_if is_installed, user: rvm_user
   end
 end
