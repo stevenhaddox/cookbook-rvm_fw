@@ -27,12 +27,12 @@ potentially_at_compile_time do
   # iconv libyaml libxml2 libxslt ncurses openssl readline zlib
   packages = value_for_platform_family(
     %w(rhel fedora suse) => %w(
-      autoconf automake bash bison bzip2 curl gcc-c++ git grep gzip libffi-devel
+      autoconf automake bash bison bzip2 curl gcc-c++ grep gzip libffi-devel
       libtool libxml2-devel libxslt-devel libyaml-devel make openssl-devel patch
       readline readline-devel sed tar zlib zlib-devel
     ),
     %w(debian) => %w(
-      autoconf automake bash bison build-essential bzip2 curl git-core grep gzip
+      autoconf automake bash bison build-essential bzip2 curl grep gzip
       libreadline6 libreadline6-dev libssl-dev libxml2-dev libxslt-dev
       libyaml-dev openssl pkg-config sed tar zlib1g zlib1g-dev
     ),
@@ -45,6 +45,16 @@ potentially_at_compile_time do
     packages.each do |pkg_name|
       package pkg_name
     end
+  end
+
+  package 'Install Git' do
+    case node[:platform]
+    when 'redhat', 'centos', 'fedora'
+      package_name 'git'
+    when 'ubuntu', 'debian'
+      package_name 'git-core'
+    end
+    not_if { system('which git') == true }
   end
 
   # Disable requiretty in /etc/sudoers file if enabled
