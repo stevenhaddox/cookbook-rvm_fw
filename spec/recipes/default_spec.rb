@@ -1,5 +1,5 @@
 #
-# Cookbook Name:: stow
+# Cookbook Name:: rvm_fw
 # Spec:: default
 #
 # Copyright (c) 2015 Steven Haddox
