@@ -27,3 +27,6 @@ suites:
         user: "<%= ENV['RVM_FW_USER'] %>"
       }
     }
+
+<% ENV['RVM_FW_USER'] || fail('RVM_FW_USER must be defined as an ENV variable') %>
+<% ENV['RVM_FW_URL'] || fail('RVM_FW_URL must be defined as an ENV variable') %>
