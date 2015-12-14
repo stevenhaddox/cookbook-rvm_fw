@@ -23,6 +23,7 @@ suites:
     attributes: {
       rvm_fw: {
         disable_requiretty: true,
+        extra_rubies: ['ruby-2.1.6'],
         url: "<%= ENV['RVM_FW_URL'] %>",
         user: "<%= ENV['RVM_FW_USER'] %>"
       }

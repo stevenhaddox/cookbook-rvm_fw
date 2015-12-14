@@ -16,7 +16,8 @@ Attributes
 * `['rvm_fw']['user'] = 'root'` (String) - User to install RVM as: root for system-wide, normal install otherwise
 * `['rvm_fw']['url'] = nil` (String) - RVM::FW server URL (e.g., 'http://rvm-fw.herokuapp.com')
 * `['rvm_fw']['version'] = '1.18.14'` (String) - RVM::FW provided RVM version
-* `['rvm_fw']['global_ruby'] = 'ruby-2.2.2'` (String) - Default Ruby version to install via RVM
+* `['rvm_fw']['global_ruby'] = 'ruby-2.2.3'` (String) - Default Ruby version to install via RVM
+* `['rvm_fw']['extra_rubies'] = ['ruby-2.1.6', 'ruby-1.9.3']` (Array) - Additional rubies to install, defaults to `[]`
 * `['rvm_fw']['disable_requiretty'] = false` [True, False] - Enable the cookbook to disable `requiretty` setting in the `/etc/sudoers` file
 
 Usage

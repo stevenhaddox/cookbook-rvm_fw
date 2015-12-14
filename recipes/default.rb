@@ -83,16 +83,25 @@ potentially_at_compile_time do
     end
   end
 
-  # Install default global Ruby
-  execute 'install_default_ruby' do
-    rvm_cmd = "source #{rvm_path}/scripts/rvm"
-    ruby_version = "#{node['rvm_fw']['global_ruby']}"
-    flags = '--default --verify-downloads 1'
-    cmd = "#{rvm_cmd} && rvm install #{ruby_version} #{flags}"
-    command "su #{rvm_user} -l -c '#{cmd}'"
-    # Do not run if global ruby is already installed
-    not_if do
-      global_ruby_installed? rvm_path, rvm_user
+  # Create array of all rubies to install
+  ruby_versions = ["#{node['rvm_fw']['global_ruby']}"]
+  extra_rubies = node['rvm_fw']['extra_rubies'] || []
+  unless extra_rubies.empty?
+    extra_rubies = extra_rubies.to_ary if extra_rubies.class == String
+    ruby_versions = ruby_versions.concat(extra_rubies)
+  end
+
+  ruby_versions.each do |ruby_version|
+    # Install the specified ruby version
+    execute "install_ruby #{ruby_version}" do
+      rvm_cmd = "source #{rvm_path}/scripts/rvm"
+      flags = '--verify-downloads 1'
+      cmd = "#{rvm_cmd} && rvm install #{ruby_version} #{flags}"
+      command "su #{rvm_user} -l -c '#{cmd}'"
+      # Do not run if ruby version is already installed
+      not_if do
+        ruby_installed? rvm_path, rvm_user, ruby_version
+      end
     end
   end
 

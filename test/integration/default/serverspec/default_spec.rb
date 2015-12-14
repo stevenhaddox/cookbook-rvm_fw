@@ -8,7 +8,7 @@ describe 'rvm_fw::default' do
       expect(subject.exit_status).to eq 0
     end
     it "is the default RVM ruby" do
-      expect(subject.stdout).to match(/\/home\/vagrant\/.rvm\/rubies\/ruby-2.2.2\/bin\/ruby\n/)
+      expect(subject.stdout).to match(/\/home\/vagrant\/.rvm\/rubies\/ruby-2.2.3\/bin\/ruby\n/)
     end
   end
 
@@ -26,7 +26,7 @@ describe 'rvm_fw::default' do
       expect(subject.exit_status).to eq 0
     end
     it "is the right version" do
-      expect(subject.stdout).to match(/ruby 2.2.2/)
+      expect(subject.stdout).to match(/ruby 2.2.3/)
     end
   end
 
@@ -36,7 +36,17 @@ describe 'rvm_fw::default' do
       expect(subject.exit_status).to eq 0
     end
     it "is the right version" do
-      expect(subject.stdout).to match(/ruby 2.2.2/)
+      expect(subject.stdout).to match(/ruby 2.2.3/)
+    end
+  end
+
+  # Verify an optional additional ruby installed properly
+  describe command("/home/vagrant/.rvm/wrappers/ruby-2.1.6/ruby --version") do
+    it "executes without error" do
+      expect(subject.exit_status).to eq 0
+    end
+    it "is the right version" do
+      expect(subject.stdout).to match(/ruby 2.1.6/)
     end
   end
 
@@ -54,7 +64,7 @@ end
 #      expect(subject.exit_status).to eq 0
 #    end
 #    it "is the default RVM ruby" do
-#      expect(subject.stdout).to match(/\/usr\/local\/rvm\/rubies\/ruby-2.2.2\/bin\/ruby\n/)
+#      expect(subject.stdout).to match(/\/usr\/local\/rvm\/rubies\/ruby-2.2.3\/bin\/ruby\n/)
 #    end
 #  end
 #
@@ -72,7 +82,7 @@ end
 #      expect(subject.exit_status).to eq 0
 #    end
 #    it "is the right version" do
-#      expect(subject.stdout).to match(/ruby 2.2.2/)
+#      expect(subject.stdout).to match(/ruby 2.2.3/)
 #    end
 #  end
 #

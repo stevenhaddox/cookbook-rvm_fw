@@ -57,13 +57,13 @@ equivalent for your platform) before installing Ruby!'
       results.stdout.match(node['rvm_fw']['version'])
     end
 
-    # Detect if global ruby version is already installed via RVM
-    def global_ruby_installed?(rvm_path, rvm_user)
+    # Detect if a given ruby version is already installed via RVM
+    def ruby_installed?(rvm_path, rvm_user, ruby_version)
       cmd = "su #{rvm_user} -l -c 'source #{rvm_path}/scripts/rvm && \
               rvm list'"
       ::Chef::Log.debug("Running [#{cmd}]")
       results = shell_out(cmd)
-      results.stdout.match(node['rvm_fw']['global_ruby'])
+      results.stdout.match(ruby_version)
     end
 
     # Detect if global ruby version is already set as default RVM ruby
