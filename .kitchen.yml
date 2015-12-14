@@ -23,7 +23,11 @@ suites:
     attributes: {
       rvm_fw: {
         disable_requiretty: true,
+        extra_rubies: ['ruby-2.1.6'],
         url: "<%= ENV['RVM_FW_URL'] %>",
         user: "<%= ENV['RVM_FW_USER'] %>"
       }
     }
+
+<% ENV['RVM_FW_USER'] || fail('RVM_FW_USER must be defined as an ENV variable') %>
+<% ENV['RVM_FW_URL'] || fail('RVM_FW_URL must be defined as an ENV variable') %>
