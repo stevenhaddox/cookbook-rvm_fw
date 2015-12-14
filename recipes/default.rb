@@ -6,6 +6,7 @@
 
 # Update apt packages for debian platforms
 include_recipe 'apt' if node['platform_family'] == 'debian'
+#TODO include_recipe 'yum-epel' if %w(rhel fedora).include?(node['platform_family'])
 include_recipe 'build-essential'
 require 'chef/mixin/shell_out'
 Chef::Recipe.send(:include, ::Chef::Mixin::ShellOut)
@@ -48,13 +49,24 @@ potentially_at_compile_time do
   end
 
   package 'Install Git' do
-    case node[:platform]
-    when 'redhat', 'centos', 'fedora'
+    case node['platform_family']
+    when 'rhel', 'fedora'
       package_name 'git'
-    when 'ubuntu', 'debian'
+    when 'debian', 'suse'
+      package_name 'git-core'
+    else
       package_name 'git-core'
     end
-    not_if { system('which git') == true }
+    not_if do
+      # Detect if git is installed, if true skip installing it
+      begin
+        Mixlib::ShellOut.new('which git').run_command.error!
+        true # Return true if there was no error, git is installed
+      rescue
+        false # Return false if git is not installed
+      end
+    end
+    #not_if { system('which git') == true }
   end
 
   # Disable requiretty in /etc/sudoers file if enabled
@@ -84,7 +96,7 @@ potentially_at_compile_time do
   end
 
   # Create array of all rubies to install
-  ruby_versions = ["#{node['rvm_fw']['global_ruby']}"]
+  ruby_versions = [node['rvm_fw']['global_ruby']]
   extra_rubies = node['rvm_fw']['extra_rubies'] || []
   unless extra_rubies.empty?
     extra_rubies = extra_rubies.to_ary if extra_rubies.class == String
