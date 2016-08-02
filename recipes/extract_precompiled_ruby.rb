@@ -5,10 +5,10 @@ else
   rvm_path = "/home/#{rvm_user}/.rvm"
 end
 
-rvm_parent_path =  ".. #{rvm_path}"
-
 # node['rvm_fw']['path'] overrides above default paths
 rvm_path = node['rvm_fw']['path'] unless node['rvm_fw']['path'].nil?
+
+rvm_parent_path =  ".. #{rvm_path}"
 
 # Download the tar file from the web server
 remote_file "#{rvm_parent_path}#{node['rvm_fw']['compiled_file']}.tar.gz" do
