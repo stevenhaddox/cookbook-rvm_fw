@@ -1,10 +1,19 @@
+rvm_user = node['rvm_fw']['user']
+if rvm_user == 'root'
+  rvm_path = '/usr/local/rvm'
+  rvm_parent_path =  '/usr/local/'
+else
+  rvm_path = "/home/#{rvm_user}/.rvm"
+  rvm_parent_path =  "/home/#{rvm_user}/"
+end
+
 #download the tar file from the web server
-remote_file "/home/#{rvm_user}/#{node['rvm_fw']['compiled_file']}.tar.gz" do
+remote_file "#{rvm_parent_path}#{node['rvm_fw']['compiled_file']}.tar.gz" do
   source "#{node['rvm_fw']['pre_compiled_src_url']}/#{node['rvm_fw']['compiled_file']}.tar.gz"
   owner "#{rvm_user}"
   group "#{rvm_user}"
   mode '0775'
-  notifies :run, 'execute[unpack_rvm_tar]', :immediately
+#  notifies :run, 'execute[unpack_rvm_tar]', :immediately
   action :create
   not_if do ::File.exists?("#{rvm_path}") end
 end
@@ -12,18 +21,20 @@ end
 # unpack the tar  and ensure proper permissions
 execute 'unpack_rvm_tar' do
   command <<-EOH
-    cd /home/#{rvm_user}/
+  cd #{rvm_parent_path}
     tar zxf #{node['rvm_fw']['compiled_file']}.tar.gz
-    if [#{rvm_path} = "/usr/local/rvm"]; then
-      mv .rvm rvm
-      chown #{rvm_user}:#{rvm_user} -R rvm
-    else
-      chown #{rvm_user}:#{rvm_user} -R .rvm
-    fi
     rm #{node['rvm_fw']['compiled_file']}.tar.gz
+    chown #{rvm_user}:#{rvm_user} -R .rvm
   EOH
   not_if do ::File.exists?("#{rvm_path}") end
-  action :nothing
-endd
+end
 
-
+#the root installs to a different folder , if root is the user  move the folder
+execute 'remap_rvm_directory' do
+command <<-EOH
+cd #{rvm_parent_path}
+  mv -f .rvm rvm
+  chown #{rvm_user}:#{rvm_user} -R rvm
+EOH
+  not_if do rvm_path == "/home/#{rvm_user}/.rvm" end # add and  file exists?
+end
