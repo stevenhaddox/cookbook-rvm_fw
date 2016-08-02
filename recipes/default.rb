@@ -26,8 +26,9 @@ end
 rvm_path = node['rvm_fw']['path'] unless node['rvm_fw']['path'].nil?
 
 #Attempt to download a precompiled version of the .rvm folder and its rubies
-include_recipe 'rvm_fw::extract_precompiled_ruby' if
-node['rvm_fw']['use_precompile?'] == true
+if node['rvm_fw']['use_precompile?'] == true
+  include_recipe 'rvm_fw::extract_precompiled_ruby'
+end
 
 potentially_at_compile_time do
   # Pre-install packages to ensure RVM Rubies can compile against them
