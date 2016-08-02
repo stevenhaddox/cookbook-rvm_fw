@@ -63,15 +63,18 @@ And are available for the following commands:
 
 The attribute `['rvm_fw']['use_precompile?']` can be set to "true" to enable the downloading and installation of a prepackaged .rvm file.
 It downloads and extracts a tar.gz file.
-The user must specify a source url to download from by setting the `['rvm_fw']['pre_compiled_src_url']` attribute to a vaild url.
-Do not include any trailing "/"s
-(Example):
-   `'http://example.com/directory/directory'`
 
-The user must also specify a name for the source file by setting the `['rvm_fw']['compiled_file']` attribute
-Do not include the `.tar.gz` extension  in the name
-(Example):
-   `'example-file-name'`
+The user must specify a source url to download from by setting the `['rvm_fw']['pre_compiled_src_url']` attribute to a vaild url.
+
+Do not include any trailing "/"s.
+
+(Example): `'http://example.com/directory/directory'`
+
+The user must also specify a name for the source file by setting the `['rvm_fw']['compiled_file']` attribute.
+
+Do not include the `.tar.gz` extension  in the name.
+
+(Example): `'example-file-name'`
 
 #### RHEL Distros & `requiretty`
 
