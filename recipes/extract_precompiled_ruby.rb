@@ -1,11 +1,11 @@
 rvm_user = node['rvm_fw']['user']
 if rvm_user == 'root'
   rvm_path = '/usr/local/rvm'
-  rvm_parent_path =  '/usr/local/'
 else
   rvm_path = "/home/#{rvm_user}/.rvm"
-  rvm_parent_path =  "/home/#{rvm_user}/"
 end
+
+rvm_parent_path =  ".. #{rvm_path}"
 
 # node['rvm_fw']['path'] overrides above default paths
 rvm_path = node['rvm_fw']['path'] unless node['rvm_fw']['path'].nil?
