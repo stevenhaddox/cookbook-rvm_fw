@@ -8,10 +8,10 @@ end
 # node['rvm_fw']['path'] overrides above default paths
 rvm_path = node['rvm_fw']['path'] unless node['rvm_fw']['path'].nil?
 
-rvm_parent_path =  ".. #{rvm_path}"
+rvm_parent_path = File.dirname("#{rvm_path}")
 
 # Download the tar file from the web server
-remote_file "#{rvm_parent_path}#{node['rvm_fw']['compiled_file']}.tar.gz" do
+remote_file "#{rvm_parent_path}/#{node['rvm_fw']['compiled_file']}.tar.gz" do
   source "#{node['rvm_fw']['pre_compiled_src_url']}/#{node['rvm_fw']['compiled_file']}.tar.gz"
   owner "#{rvm_user}"
   group "#{rvm_user}"
