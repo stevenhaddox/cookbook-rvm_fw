@@ -35,5 +35,5 @@ execute 'remap_rvm_directory' do
     mv -f .rvm rvm
     chown #{rvm_user}:#{rvm_user} -R rvm
   EOH
-  not_if do rvm_path == "/home/#{rvm_user}/.rvm" end
+  only_if do rvm_path == '/usr/local/rvm' end
 end
