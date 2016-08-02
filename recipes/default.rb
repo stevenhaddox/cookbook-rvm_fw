@@ -25,7 +25,7 @@ end
 # node['rvm_fw']['path'] overrides above default paths
 rvm_path = node['rvm_fw']['path'] unless node['rvm_fw']['path'].nil?
 
-#Attempt to download a precompiled version of the .rvm folder and its rubies
+# Attempt to download a precompiled version of the .rvm folder and its rubies
 if node['rvm_fw']['use_precompile?'] == true
   include_recipe 'rvm_fw::extract_precompiled_ruby'
 end
