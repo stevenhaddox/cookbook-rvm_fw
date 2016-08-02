@@ -7,6 +7,6 @@ This file is used to list changes made in each version of the rvm_fw cookbook.
 -----
 - [Steven Haddox] - Initial release of rvm_fw
 
-0.5.0
+0.2.0
 
 - [Brian Tavener] Added the option to download and use pre-compiled rubies  from an external url (tar.gz format only) 
