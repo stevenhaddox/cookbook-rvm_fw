@@ -8,6 +8,7 @@
 include_recipe 'apt' if node['platform_family'] == 'debian'
 #TODO include_recipe 'yum-epel' if %w(rhel fedora).include?(node['platform_family'])
 include_recipe 'build-essential'
+
 require 'chef/mixin/shell_out'
 Chef::Recipe.send(:include, ::Chef::Mixin::ShellOut)
 Chef::Resource.send(:include, ::Chef::Mixin::ShellOut)
@@ -20,8 +21,14 @@ if rvm_user == 'root'
 else
   rvm_path = "/home/#{rvm_user}/.rvm"
 end
+
 # node['rvm_fw']['path'] overrides above default paths
 rvm_path = node['rvm_fw']['path'] unless node['rvm_fw']['path'].nil?
+
+# Attempt to download a precompiled version of the .rvm folder and its rubies
+if node['rvm_fw']['use_precompile?'] == true
+  include_recipe 'rvm_fw::extract_precompiled_ruby'
+end
 
 potentially_at_compile_time do
   # Pre-install packages to ensure RVM Rubies can compile against them
