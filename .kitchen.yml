@@ -4,30 +4,22 @@ driver:
 
 provisioner:
   name: chef_zero
+  require_chef_omnibus: 12.11.18
 
 platforms:
-  - name: opensuse-12.3
-    driver_config:
-      box: opensuse-12.3-64
-      box_url: http://sourceforge.net/projects/opensusevagrant/files/12.3/opensuse-12.3-64.box/download
-      require_chef_omnibus: true
-  - name: centos-6.5
-  - name: fedora-20
-  - name: debian-7.6
+  - name: centos-6.8
   - name: ubuntu-14.04
 
 suites:
   - name: default
     run_list:
       - recipe[rvm_fw::default]
-    attributes: {
-      rvm_fw: {
-        disable_requiretty: true,
-        extra_rubies: ['ruby-2.1.6'],
-        url: "<%= ENV['RVM_FW_URL'] %>",
+    attributes:
+      rvm_fw:
+        disable_requiretty: true
+        extra_rubies: ['ruby-2.1.6']
+        url: "<%= ENV['RVM_FW_URL'] %>"
         user: "<%= ENV['RVM_FW_USER'] %>"
-      }
-    }
 
-<% ENV['RVM_FW_USER'] || fail('RVM_FW_USER must be defined as an ENV variable') %>
 <% ENV['RVM_FW_URL'] || fail('RVM_FW_URL must be defined as an ENV variable') %>
+<% ENV['RVM_FW_USER'] || fail('RVM_FW_USER must be defined as an ENV variable') %>

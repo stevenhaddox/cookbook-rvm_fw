@@ -10,8 +10,8 @@ version '0.4.1'
 
 recipe 'rvm_fw::default', 'Install RVM via RVM::FW server'
 
-depends 'build-essential', '~> 2.0'
-depends 'apt', '~> 2.7'
+depends 'build-essential', '~> 7.0'
+depends 'apt', '~> 6.0.1'
 
 supports 'centos'
 supports 'fedora'
